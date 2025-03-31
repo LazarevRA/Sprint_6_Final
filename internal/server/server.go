@@ -8,15 +8,16 @@ import (
 	"github.com/Yandex-Practicum/go1fl-sprint6-final/internal/handlers"
 )
 
-type ServerStr struct {
+type Server struct {
 	Log  *log.Logger
 	Http *http.Server
 }
 
-func Server(logger *log.Logger) *ServerStr {
+func NewServer(logger *log.Logger) *Server {
 
 	r := http.NewServeMux()
-	r.HandleFunc("/", handlers.GetIndex)
+
+	r.HandleFunc("/", handlers.IndexHandler)
 	r.HandleFunc("/upload", handlers.Upload)
 
 	server := &http.Server{
@@ -27,7 +28,7 @@ func Server(logger *log.Logger) *ServerStr {
 		WriteTimeout: 10 * time.Second,
 		IdleTimeout:  15 * time.Second,
 	}
-	return &ServerStr{
+	return &Server{
 		Log:  logger,
 		Http: server,
 	}

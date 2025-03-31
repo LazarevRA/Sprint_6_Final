@@ -11,22 +11,30 @@ import (
 	"github.com/Yandex-Practicum/go1fl-sprint6-final/internal/service"
 )
 
-func GetIndex(w http.ResponseWriter, r *http.Request) {
+func IndexHandler(w http.ResponseWriter, r *http.Request) {
 
-	resp, err := os.ReadFile("index.html")
+	// Не разобрался, как адекватно реализовать проверку методов внутри сервера
+	// Реализовал внутри хендлера
 
-	if err != nil {
-		http.Error(w, "os.ReadFile error:"+err.Error(), http.StatusInternalServerError)
+	if r.Method != http.MethodGet {
+		http.Error(w, "method not allowed", http.StatusInternalServerError)
 		return
 	}
 
 	w.Header().Set("Content-Type", "text/html; charset=UTF-8")
-	w.WriteHeader(http.StatusOK)
-	w.Write(resp)
+	http.ServeFile(w, r, "./index.html")
 
 }
 
 func Upload(w http.ResponseWriter, r *http.Request) {
+
+	// Не разобрался, как адекватно реализовать проверку методов внутри сервера
+	// Реализовал внутри хендлера
+
+	if r.Method != http.MethodPost {
+		http.Error(w, "method not allowed", http.StatusInternalServerError)
+		return
+	}
 
 	if err := r.ParseMultipartForm(10 << 20); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -57,7 +65,12 @@ func Upload(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	w.Header().Set("Content-Type", "text/plain")
+	w.Header().Set("Content-Type", "text/plain; charset=UTF-8")
 	w.WriteHeader(http.StatusOK)
-	w.Write(convertedData)
+
+	if _, err = w.Write(convertedData); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
 }

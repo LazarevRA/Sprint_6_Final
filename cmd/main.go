@@ -10,7 +10,7 @@ import (
 func main() {
 
 	logger := log.New(os.Stdout, "server: ", log.Ldate|log.LstdFlags|log.Lshortfile)
-	serv := server.Server(logger)
+	serv := server.NewServer(logger)
 
 	logger.Println("Starting server")
 	if err := serv.Http.ListenAndServe(); err != nil {
