@@ -13,28 +13,12 @@ import (
 
 func IndexHandler(w http.ResponseWriter, r *http.Request) {
 
-	// Не разобрался, как адекватно реализовать проверку методов внутри сервера
-	// Реализовал внутри хендлера
-
-	if r.Method != http.MethodGet {
-		http.Error(w, "method not allowed", http.StatusInternalServerError)
-		return
-	}
-
 	w.Header().Set("Content-Type", "text/html; charset=UTF-8")
 	http.ServeFile(w, r, "./index.html")
 
 }
 
 func Upload(w http.ResponseWriter, r *http.Request) {
-
-	// Не разобрался, как адекватно реализовать проверку методов внутри сервера
-	// Реализовал внутри хендлера
-
-	if r.Method != http.MethodPost {
-		http.Error(w, "method not allowed", http.StatusInternalServerError)
-		return
-	}
 
 	if err := r.ParseMultipartForm(10 << 20); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
